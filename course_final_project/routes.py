@@ -13,12 +13,12 @@ def index():
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
     form = RegistrationForm()
-    if form.validate_on_submit():
+    if request.method == "POST":
         user = User(username = form.username.data, email = form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for("index"))
+        return redirect(url_for("signin", _external=True, _scheme="https"))
     return render_template("registration.html", form=form)
     
 
