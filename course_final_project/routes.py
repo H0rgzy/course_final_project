@@ -1,7 +1,6 @@
-from app import app, login_manager, db
-from flask import Flask, render_template, redirect, url_for, request
+from app import app, db
+from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, current_user
-from werkzeug.security import check_password_hash
 from forms import RegistrationForm, SigninForm
 from models import User, Visit
 
@@ -18,13 +17,10 @@ def registration():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for("signin", _external=True, _scheme="https"))
+        flash(' You are now registered')
+        return redirect(url_for("signin"))
     return render_template("registration.html", form=form)
     
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 @app.route("/signin", methods= ["POST", "GET"])
 def signin():
@@ -37,14 +33,11 @@ def signin():
             return redirect(next_page) if next_page else redirect(url_for("account", _external= True, _scheme="https"))
     return render_template("signin.html", form=form)
 
-@login_manager.unauthorized_handler
-def unauthorized():
-    return "You are not authorized"
 
 
-@app.route("/account/<user>")
-@login_required
-def account(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    return render_template("account.html", user=user)
+# @app.route("/account/<user>")
+# @login_required
+# def account(username):
+#     user = User.query.filter_by(username=username).first_or_404()
+#     return render_template("account.html", user=user)
 

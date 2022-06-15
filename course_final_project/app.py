@@ -11,8 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///mydb.db'
 
 app.config["SECRET_KEY"] = "S3cret14"
 
-login_manager = LoginManager()
-login_manager.init_app(app)
+login = LoginManager(app)
+login.login_view ='login'
 
-
-import models, routes
+import routes, models
