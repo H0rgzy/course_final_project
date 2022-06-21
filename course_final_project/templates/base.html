@@ -7,7 +7,18 @@
 
     
     <h1>Our Scotland Trip</h1>
-    
+
+    <hr>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+            
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <body>
         {% block content %}
         {% endblock %}

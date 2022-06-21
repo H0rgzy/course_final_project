@@ -12,7 +12,7 @@ def index():
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
     form = RegistrationForm()
-    if request.method == "POST":
+    if form.validate_on_submit():
         user = User(username = form.username.data, email = form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
