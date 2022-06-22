@@ -2,7 +2,9 @@
 
 {% block content %}
 
-    <h3>Welcome {{current_user.username}}</h3>
+    {% if current_user.is_authenticated %}
 
+        <h3>Welcome {{current_user.username}}</h3>
+    {% endif %}
 {% endblock %}
 

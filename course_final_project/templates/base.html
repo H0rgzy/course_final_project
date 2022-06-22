@@ -11,13 +11,13 @@
     <hr>
 
     {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-            
-        {% endfor %}
-    </ul>
-    {% endif %}
+        {% if messages %}
+        
+            {% for message in messages %}
+                {{ message }}    
+            {% endfor %}
+        
+        {% endif %}
     {% endwith %}
     <body>
         {% block content %}
