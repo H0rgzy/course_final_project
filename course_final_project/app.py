@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
@@ -13,5 +13,9 @@ app.config["SECRET_KEY"] = "S3cret14"
 
 login = LoginManager(app)
 login.login_view ='login'
+
+
+
+
 
 import routes, models

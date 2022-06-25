@@ -1,7 +1,7 @@
-from app import app, db
+from app import app, db, login
 from flask import render_template, redirect, url_for, request, flash
-from flask_login import login_required, login_user, current_user
-from forms import RegistrationForm, SigninForm
+from flask_login import login_required, login_user, current_user, logout_user
+from forms import LogoutForm, RegistrationForm, SigninForm
 from models import User, Visit
 from werkzeug.urls import url_parse
 
@@ -37,14 +37,29 @@ def signin():
                 next = url_for('account')
                 return redirect(next)
 
-            return redirect(next or url_for("account"))
+            return redirect(next or url_for("signin"))
         
     return render_template("signin.html", form=form)
 
 
 
-@app.route("/account")
+@login.unauthorized_handler
+def unauthorized_callback():
+    return redirect(url_for('signin'))
+
+
+@app.route("/account", methods=["POST", "GET"])
 @login_required
 def account():
-    return "you are logged in"
+    form = LogoutForm()
+    user = current_user
+    user = User.query.filter_by(username=user.username).first()
+    if request.method == "POST":
+        logout()
+    return render_template("account.html",user=user, form=form)
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("signin"))
 
