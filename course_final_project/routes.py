@@ -1,7 +1,7 @@
 from app import app, db, login
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, current_user, logout_user
-from forms import LogoutForm, RegistrationForm, SigninForm
+from forms import LogoutForm, RegistrationForm, SigninForm, VisitForm
 from models import User, Visit
 from werkzeug.urls import url_parse
 
@@ -14,12 +14,15 @@ def index():
 def registration():
     form = RegistrationForm()
     if request.method == 'POST':
-        user = User(username = form.username.data, email = form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash(' You are now registered')
-        return redirect(url_for("signin"))
+        if form.password.data == form.password2.data:
+            user = User(username = form.username.data, email = form.email.data)
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash(' You are now registered')
+            return redirect(url_for("signin"))
+        else:
+            flash("Passwords do not match")
     return render_template("registration.html", form=form)
     
 
@@ -62,4 +65,22 @@ def account():
 def logout():
     logout_user()
     return redirect(url_for("signin"))
+
+@app.route("/visit", methods=["POST", "GET"])
+@login_required
+def visit():
+    form = VisitForm()
+    user = current_user
+    user = User.query.filter_by(username = user.username).first()
+    
+    places = Visit.query.all()
+    
+    if request.method == "POST":
+        place = Visit(place=form.place.data, user_id=user.id, rating=form.rating.data)
+        db.session.add(place)
+        db.session.commit()
+        flash("The place has been successfully added")
+        return render_template("visit.html", form=form, user=user, places=places)
+    return render_template("visit.html", form=form, user=user, places=places)
+
 

@@ -7,7 +7,7 @@ class RegistrationForm(FlaskForm):
     username = StringField("Username", validators= [DataRequired()])
     email = EmailField("Email address", validators= [DataRequired(), Email()])
     password = PasswordField("Password", validators= [DataRequired()])
-    password2 = PasswordField("Repeat Password", validators= [DataRequired(), EqualTo("password")])
+    password2 = PasswordField("Repeat Password", validators= [DataRequired(), EqualTo(password)])
     submit = SubmitField("Register")
 
 class SigninForm(FlaskForm):
@@ -17,3 +17,8 @@ class SigninForm(FlaskForm):
 
 class LogoutForm(FlaskForm):
     submit = SubmitField("Logout")
+
+class VisitForm(FlaskForm):
+    place = StringField("Place you want to visit", validators=[DataRequired()])
+    rating= StringField("How important is it you go there? 0-5", validators=[DataRequired()])
+    submit = SubmitField("Submit")
