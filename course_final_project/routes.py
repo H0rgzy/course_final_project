@@ -83,4 +83,12 @@ def visit():
         return render_template("visit.html", form=form, user=user, places=places)
     return render_template("visit.html", form=form, user=user, places=places)
 
+@app.route("/visit/delete/<int:place_id>", methods=["POST"])
+@login_required
+def delete_place(place_id):
+    place = Visit.query.get_or_404(place_id)
+    db.session.delete(place)
+    db.session.commit()
+    flash("Place deleted")
+    return redirect(url_for("visit", _external=True, _scheme="http"))
 
