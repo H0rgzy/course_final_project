@@ -1,8 +1,9 @@
+from cmath import log
 from app import app, db, login
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, current_user, logout_user
-from forms import LogoutForm, RegistrationForm, SigninForm, VisitForm
-from models import User, Visit
+from forms import LogoutForm, RegistrationForm, SigninForm, VisitForm, ReviewForm
+from models import User, Visit, Been
 from werkzeug.urls import url_parse
 
 
@@ -92,3 +93,35 @@ def delete_place(place_id):
     flash("Place deleted")
     return redirect(url_for("visit", _external=True, _scheme="http"))
 
+@app.route("/visit/move/<int:place_id>", methods=["POST"])
+@login_required
+def move_place(place_id):
+    visit = Visit.query.get_or_404(place_id)
+    place = visit.place
+    db.session.delete(visit)
+    db.session.commit()
+    visited = Been(place = place, review = None, user_name = None)
+    db.session.add(visited)
+    db.session.commit()
+    return redirect(url_for("visit", _external=True, _scheme="http"))
+
+@app.route("/been", methods=["GET", "POST"])
+@login_required
+def been():
+    form = ReviewForm()
+    user = current_user
+    user = User.query.filter_by(username=user.username).first()
+    places = Been.query.all()
+
+    if request.method == 'POST':
+        review_id = form.id_num.data
+        visited = Been.query.get(review_id)
+        if visited:
+            visited.review = form.review.data
+            visited.user_name = user.username
+            db.session.commit()
+            return redirect(url_for('been'))
+    
+    return render_template("been.html", form=form, user=user, places=places)
+
+        

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, EmailField
+from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Email
 
 
@@ -22,3 +22,8 @@ class VisitForm(FlaskForm):
     place = StringField("Place you want to visit", validators=[DataRequired()])
     rating= StringField("How important is it you go there? 0-5", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+class ReviewForm(FlaskForm):
+    id_num = IntegerField("Id number of the place you wish to review: ", validators=[DataRequired()])
+    review = StringField("Quick review in less than 200 characters", validators=[DataRequired()])
+    submit = SubmitField("Submit review")

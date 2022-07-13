@@ -8,6 +8,9 @@
 <ul>
     <li>{{ place.place }} --- {{ place.rating }} <form action="{{ url_for ('delete_place', place_id=place.id) }}" method="post">
         <input class="btn" type="submit" name="delete" value="Delete">
+    </form>
+    <form action="{{url_for('move_place', place_id = place.id) }}", method="post">
+        <input class="btn" type="submit" name="move" value="Move to visited">
     </form></li>
 </ul>
 {% endfor %}

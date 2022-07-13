@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Places we have visited!</h3>
+
+{% for place in places %}
+
+    <ul>
+        <ul>
+            <li>{{ place.id }}-{{ place.place }}</li>
+        {% if place.review %}
+            <li>{{ place.review }}</li>
+            <li>{{ place.user_name }}</li>
+        
+        {% endif %}
+        </ul>
+    </ul>
+{% endfor %}
+
+    <form action="" method="POST">
+    {{form.hidden_tag()}}
+    {{form.id_num.label}}
+    {{form.id_num()}}
+    {{form.review.label}}
+    {{form.review()}}
+    {{form.submit()}}
+    </form>
+
+
+{% endblock %}

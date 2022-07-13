@@ -31,3 +31,9 @@ class Visit(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     rating = db.Column(db.Integer, index= True, unique = False)
 
+class Been(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    place = db.Column(db.String(100), index=True)
+    review = db.Column(db.String(200), index=False)
+    user_name = db.Column(db.String(50), db.ForeignKey('user.username'))
+
