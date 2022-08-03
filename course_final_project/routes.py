@@ -81,7 +81,7 @@ def visit():
         db.session.add(place)
         db.session.commit()
         flash("The place has been successfully added")
-        return render_template("visit.html", form=form, user=user, places=places)
+        return redirect(url_for("visit", _external=True, _scheme="http"))
     return render_template("visit.html", form=form, user=user, places=places)
 
 @app.route("/visit/delete/<int:place_id>", methods=["POST"])
